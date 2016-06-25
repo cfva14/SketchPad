@@ -1,0 +1,13 @@
+*{
+	box-sizing: border-box;
+}
+.controller{
+	position: relative;
+	display: inline-block;
+	transform: translate(-50%);
+	left: 50%;
+}
+button{
+	margin: 20px;
+	
+}

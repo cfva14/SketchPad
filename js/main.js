@@ -1,79 +1,95 @@
 $(document).ready(function(){
-
+//Global variabes
 	var squares = 16;
 	var side;
-	var i = 0;
+	var i;
 	var measure;
-
+	var option = 1;
+	var currentOpacity = 0.1;
+	//build the container
 	$("#container").css({
 		"width":"500px",
 		"height":"500px",
 		"margin":"auto", 
 	});
 
-	$("#clear").css({
-		"margin":"auto", 
+	start(option)
+
+	//Select the desired option
+	$("#normalButton").click(function(){
+		option = 1;
+		start(option);
+	});
+	$("#rgbButton").click(function(){
+		option = 2;
+		start(option);
+	});
+	$("#transparentButton").click(function(){
+		option = 3;
+		start(option);
+	});
+	$("#trailButton").click(function(){
+		option = 4;
+		start(option);
 	});
 
-	while(i < 16){
-		$("#container").append("<div></div>");
-		i++;
-    }
-
-    $("div div").css({
-		"border": "1px solid black",
-		"width":"125px",
-		"height":"125px",
-		"float":"left",
-		"box-sizing": "border-box"
-	});
-
-	$("div div").mouseover(function(){
-		$(this).css({
-			"background-color": "red",
-		});
-	});
-
-	$("div div").mouseout(function(){
-		$(this).css({
-			"background-color": "white",
-		});
-	});
-	
-
-
-
-
-	$("#clear").click(function(){
+	//create the grid
+	function start(option){
+		$(".square").remove();
 		side = prompt("How many squares per side in the new grid?");
-		$("div div").remove();
+		if (side > 100) {
+			side = prompt("A number smaller than 100, please.");
+		}
 		squares = side * side;
-		var j = 0;
-		while(j < squares){
-			$("#container").append("<div></div>");
-			j++
-			console.log("Contando");
+		i = 0;
+		while(i < squares){
+			$("#container").append("<div class='square'></div>");
+			i++
 		};
 		measuare = 500 / side;
-		$("div div").css({
-		"border": "1px solid black",
-		"width":measuare+'px',
-		"height":measuare+'px',
-		"float":"left",
-		"box-sizing": "border-box"
-	});
-
-		$("div div").mouseover(function(){
-		$(this).css({
-			"background-color": "red",
+		$(".square").css({
+			"border": "1px solid black",
+			"width":measuare+'px',
+			"height":measuare+'px',
+			"float":"left",
+			"box-sizing": "border-box",
+			"background-color": "red"
 		});
-	});
-
-	$("div div").mouseout(function(){
-		$(this).css({
-			"background-color": "white",
+		//Choose different grid
+		$(".square").mouseover(function(){
+			switch(option){
+				//Grid normal
+				case 1: 
+						$(this).css({"background-color": "blue"});
+						$(this).mouseout(function(){
+							$(this).css({"background-color": "red"});
+						});
+				break;
+				//Grid random colored
+				case 2:
+						$(this).css({
+							"background-color": "rgb("+random()+", "+random()+", "+random()+")"
+						});
+				break;
+				//Change the opacity 
+				case 3:
+						currentOpacity = $(this).css('opacity');
+						if (currentOpacity > 0) {
+							$(this).css("opacity",currentOpacity - 0.1);
+						}
+						
+				break;
+				//Build trial
+				case 4:
+						$(this).fadeTo(100,0);
+						$(this).mouseleave(function(){
+							$(this).fadeTo(400,1);
+						});
+				break;
+			}
 		});
-	});
-	})
-
+	}
+	function random(){
+		return Math.floor((Math.random() * 255))
+	}
 });
